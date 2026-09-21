@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Scroll Animation</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      background-color: #000000;
+      color: transparent;
+      overflow-x: hidden;
+    }
+
+    /* Elegant, subtle scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #000000;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.25);
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.45);
+    }
+
+    /* Scroll track height: 600vh ensures smooth, fine-grained control over 185 frames */
+    .scroll-container {
+      height: 600vh;
+      width: 100%;
+      position: relative;
+    }
+
+    /* Fixed fullscreen canvas viewport */
+    .canvas-viewport {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    canvas {
+      width: 100vw;
+      height: 100vh;
+      display: block;
+      object-fit: cover;
+    }
+  </style>
+</head>
+<body>
+  <div class="scroll-container">
+    <div class="canvas-viewport">
+      <canvas id="frameCanvas"></canvas>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const TOTAL_FRAMES = 185;
+      const canvas = document.getElementById('frameCanvas');
+      const ctx = canvas.getContext('2d', { alpha: false });
+
+      const images = new Array(TOTAL_FRAMES);
+      const isLoaded = new Array(TOTAL_FRAMES).fill(false);
+
+      let currentFrame = 1;
+      let targetFrame = 1;
+      let lastDrawnIndex = -1;
+      let isAnimating = false;
+
+      function getFrameUrl(index) {
+        const padded = String(index).padStart(3, '0');
+        return `/frames/frame_${padded}.jpg`;
+      }
+
+      function resizeCanvas() {
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+
+        canvas.width = Math.round(width * dpr);
+        canvas.height = Math.round(height * dpr);
+
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+
+        drawCurrentFrame(true);
+      }
+
+      function drawFrame(img) {
+        if (!img || !img.complete || img.naturalWidth === 0) return;
+
+        const cw = canvas.width;
+        const ch = canvas.height;
+        const nw = img.naturalWidth;
+        const nh = img.naturalHeight;
+
+        // "cover" fit math
+        const imgRatio = nw / nh;
+        const canvasRatio = cw / ch;
+
+        let renderW, renderH, offsetX, offsetY;
+
+        if (canvasRatio > imgRatio) {
+          renderW = cw;
+          renderH = cw / imgRatio;
+          offsetX = 0;
+          offsetY = (ch - renderH) / 2;
+        } else {
+          renderH = ch;
+          renderW = ch * imgRatio;
+          offsetX = (cw - renderW) / 2;
+          offsetY = 0;
+        }
+
+        ctx.drawImage(img, offsetX, offsetY, renderW, renderH);
+      }
+
+      function findClosestLoadedFrame(index) {
+        if (isLoaded[index - 1]) return images[index - 1];
+
+        // Search outwards for nearest loaded frame to avoid blank flickers
+        for (let dist = 1; dist < TOTAL_FRAMES; dist++) {
+          const prev = index - 1 - dist;
+          if (prev >= 0 && isLoaded[prev]) return images[prev];
+          const next = index - 1 + dist;
+          if (next < TOTAL_FRAMES && isLoaded[next]) return images[next];
+        }
+        return null;
+      }
+
+      function drawCurrentFrame(force = false) {
+        const frameIdx = Math.max(1, Math.min(TOTAL_FRAMES, Math.round(currentFrame)));
+        if (!force && frameIdx === lastDrawnIndex) return;
+
+        const imgToDraw = findClosestLoadedFrame(frameIdx);
+        if (imgToDraw) {
+          drawFrame(imgToDraw);
+          lastDrawnIndex = frameIdx;
+        }
+      }
+
+      function updateTargetFromScroll() {
+        const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+        const scrollY = window.scrollY || window.pageYOffset || 0;
+        const progress = maxScroll > 0 ? Math.max(0, Math.min(1, scrollY / maxScroll)) : 0;
+        targetFrame = 1 + progress * (TOTAL_FRAMES - 1);
+
+        if (!isAnimating) {
+          startRenderLoop();
+        }
+      }
+
+      function renderLoop() {
+        // High quality smooth dampening (lerp)
+        const diff = targetFrame - currentFrame;
+        if (Math.abs(diff) > 0.001) {
+          currentFrame += diff * 0.15;
+          drawCurrentFrame();
+          requestAnimationFrame(renderLoop);
+        } else {
+          currentFrame = targetFrame;
+          drawCurrentFrame();
+          isAnimating = false;
+        }
+      }
+
+      function startRenderLoop() {
+        isAnimating = true;
+        requestAnimationFrame(renderLoop);
+      }
+
+      // Preload management
+      function preloadImages() {
+        // 1. Immediately load frame 1
+        const firstImg = new Image();
+        firstImg.src = getFrameUrl(1);
+        images[0] = firstImg;
+        firstImg.onload = () => {
+          isLoaded[0] = true;
+          drawCurrentFrame(true);
+        };
+
+        // 2. Load all other frames with batch concurrency
+        const remainingIndices = [];
+        for (let i = 2; i <= TOTAL_FRAMES; i++) {
+          remainingIndices.push(i);
+        }
+
+        const BATCH_SIZE = 8;
+        let cursor = 0;
+
+        function loadNext() {
+          if (cursor >= remainingIndices.length) return;
+          const frameNum = remainingIndices[cursor++];
+          const idx = frameNum - 1;
+
+          const img = new Image();
+          img.src = getFrameUrl(frameNum);
+          images[idx] = img;
+
+          img.onload = () => {
+            isLoaded[idx] = true;
+            // If current frame happens to need this image, redraw
+            const currentNearest = Math.round(currentFrame);
+            if (currentNearest === frameNum && (!lastDrawnIndex || lastDrawnIndex !== currentNearest)) {
+              drawCurrentFrame(true);
+            }
+            loadNext();
+          };
+
+          img.onerror = () => {
+            loadNext();
+          };
+        }
+
+        // Launch initial batch
+        for (let b = 0; b < BATCH_SIZE; b++) {
+          loadNext();
+        }
+      }
+
+      // Event Listeners
+      window.addEventListener('scroll', updateTargetFromScroll, { passive: true });
+      window.addEventListener('resize', resizeCanvas);
+      window.addEventListener('orientationchange', resizeCanvas);
+
+      // Initialize
+      resizeCanvas();
+      preloadImages();
+      updateTargetFromScroll();
+    })();
+  </script>
+</body>
+</html>

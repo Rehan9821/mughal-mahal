@@ -1,0 +1,6 @@
+{
+  "name": "Mughal Mahal Restaurant",
+  "description": "The official luxury digital presence for Mughal Mahal Restaurant, Rajendra Place, New Delhi. Authentic Mughlai and North Indian culinary heritage.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
