@@ -6,7 +6,6 @@ import { LoadingScreen } from './components/LoadingScreen.tsx';
 import { ReservationModal } from './components/ReservationModal.tsx';
 import { OrderModal } from './components/OrderModal.tsx';
 import { FloatingContact } from './components/FloatingContact.tsx';
-import { ScrollCanvas } from './components/ScrollCanvas.tsx';
 import { PageTransitionOverlay, SlideDirection } from './components/PageTransitionOverlay.tsx';
 import { HomePage } from './pages/HomePage.tsx';
 import { MenuPage } from './pages/MenuPage.tsx';
@@ -163,11 +162,6 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[#07070a] text-[#f4efe6] selection:bg-[#c5a059] selection:text-[#0a0a0c] relative overflow-x-clip">
-      {/* 185-Frame Video Scroll-Scrubbing Canvas - Permanently Fixed in Viewport */}
-      {currentRoute === '/' && (
-        <ScrollCanvas totalFrames={185} heroScrollDistance={2400} />
-      )}
-
       {/* Existing Initial Logo-Based Loading Experience - EXACTLY PRESERVED */}
       {initialLoading && <LoadingScreen onComplete={() => setInitialLoading(false)} />}
 

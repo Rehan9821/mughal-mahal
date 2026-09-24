@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { Calendar, Utensils, ChevronDown } from 'lucide-react';
 import { restaurantInfo } from '../data/restaurantData.ts';
-import { HeroScrollStages } from '../components/HeroScrollStages.tsx';
+import { ScrollVideoHero } from '../components/ScrollVideoHero.tsx';
 import { SignatureDishStory } from '../components/SignatureDishStory.tsx';
 import { RestaurantExperienceStory } from '../components/RestaurantExperienceStory.tsx';
 import { SignatureHighlights } from '../components/SignatureHighlights.tsx';
@@ -22,9 +22,9 @@ export const HomePage: React.FC<HomePageProps> = ({
   return (
     <div id="home-page" className="relative">
       {/* ====================================================
-          1. 185-FRAME SCROLL-SCRUBBING HERO EXPERIENCE (320vh)
+          1. 185-FRAME ULTRA-LUXURY SCROLL HERO EXPERIENCE
       ==================================================== */}
-      <HeroScrollStages
+      <ScrollVideoHero
         navigate={navigate}
         onOpenReservation={onOpenReservation}
         onOpenOrder={onOpenOrder}

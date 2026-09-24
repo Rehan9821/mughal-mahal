@@ -1,47 +1,48 @@
 # Mughal Mahal Restaurant | मुगल महल रेस्टोरेंट
+### Ultra-Luxury 3D Scroll-Scrubbed Culinary Digital Experience
 
 > **Authentic Mughlai & North Indian Culinary Heritage in Rajendra Place, New Delhi**  
-> Integrated with an interactive, high-definition 185-frame scroll-based video animation.
+> Integrated with an interactive, high-definition 185-frame scroll-based video animation engineered to "billion-dollar website" standards.
 
 ---
 
-## Highlights
+## 🌟 Billion-Dollar Experience Enhancements
 
-- **Scroll-Driven Frame Animation**: 185 high-resolution video frames rendered dynamically with high-DPI retina canvas and continuous `requestAnimationFrame` lerp inertia scrubbing.
-- **Modern Tech Stack**: React 19, TypeScript, Tailwind CSS, Motion.
-- **Comprehensive Digital Dining Experience**:
-  - Floating Glass Navigation with royal Mughal logo.
-  - Interactive Dining & Culinary Story (`SignatureDishStory`, `RestaurantExperienceStory`).
-  - Royal Dining Pillars (`SignatureHighlights`).
-  - Table Reservation Modal & Quick-Order Modal (Zomato / Swiggy / Direct Call).
-  - Floating WhatsApp & Phone Contact widget.
-  - Multi-stage scroll-scrubbing hero narrative.
-  - Full multi-page routes: `/menu`, `/about`, `/gallery`, `/reviews`, `/contact`.
-
----
-
-## Project Structure
-
-```
-├── extracted_project/         # Main React 19 + Vite web application
-│   ├── src/                  # Components, Pages, Data, Styles
-│   │   ├── components/       # UI Components, ScrollCanvas, HeroScrollStages
-│   │   ├── pages/            # Multi-page layouts (Home, Menu, About, etc.)
-│   │   └── data/             # Restaurant data & culinary items
-│   ├── public/               # Public assets & 185 animation frames
-│   │   ├── frames/           # 185 video frame images (frame_001.jpg - frame_185.jpg)
-│   │   └── assets/           # Mughal Mahal official logo
-│   └── package.json          # Node dependencies & scripts
-├── Chef_finishing_gourmet_dish_with__20260921193130_gwr_video_mvp_frames/ # Video frames source
-├── index.html                # Standalone pure animation page
-└── server.js                 # Lightweight Node.js static server
-```
+- **Sub-Pixel Inertia Scrubbing**: Continuous lerp physics (0.13 damping) for buttery, frictionless scrubbing with zero stutter.
+- **Retina 2X / 4K Crisp Canvas**: High-DPI canvas with bicubic resampling, warm golden radial ambiance, and subtle 35mm analog film-grain texture.
+- **Off-Thread Pre-Decoding**: Frames pre-decoded using `img.decode()` with keyframe priority so texture uploads never hitch the UI.
+- **Interactive Chapter Rail & Telemetry HUD**:
+  - `01. Royal Genesis` (Frames 1–45)
+  - `02. Spice Alchemy` (Frames 46–105)
+  - `03. Master's Garnish` (Frames 106–155)
+  - `04. Imperial Feast` (Frames 156–185)
+  - Real-time telemetry pill: `FRAME 089 / 185 • 4K HDR • 60 FPS MASTER`.
+- **Auto-Play Reel Mode**: Watch the master chef plate the entire dish in a smooth 24fps cinematic sequence with a single click.
+- **Royal Ambient Soundscape**: Pure Web Audio API synthesized royal tanpura drone and delicate sizzle toggle (zero external audio files needed).
+- **Auto-Pause Off-Screen**: Zero CPU/GPU wasted when reading the menu, about, or reviews pages.
 
 ---
 
-## Getting Started
+## 📦 Downloadable Final Packages
 
-### 1. Main Application (React + Vite)
+The final complete React website is packaged and ready for distribution in two identical standalone archive files:
+
+1. **[`mughal-mahal-final-react.zip`](file:///d:/mughal%20mahal%20final%203d/mughal-mahal-final-react.zip)** (~44.3 MB)
+2. **[`mughal-mahal-restaurant.zip`](file:///d:/mughal%20mahal%20final%203d/mughal-mahal-restaurant.zip)** (~44.3 MB)
+
+Both archives contain:
+- Complete source code (`src/`, `components/`, `pages/`, `data/`, `styles/`)
+- All 185 high-resolution video frames (`public/frames/`)
+- Official branding & logos (`public/assets/`)
+- Production build ready to serve (`dist/`)
+- 1-click Windows runner (`run_app.bat`)
+- Complete setup documentation (`README.md`)
+
+---
+
+## 🚀 Running Locally
+
+### Main Application (React 19 + Vite)
 ```bash
 cd extracted_project
 npm install --legacy-peer-deps
@@ -49,13 +50,8 @@ npm run dev
 ```
 Open [http://localhost:5173/](http://localhost:5173/) in your browser.
 
-### 2. Standalone Pure Animation
-```bash
-node server.js
-```
-Open [http://localhost:3001/](http://localhost:3001/) in your browser.
+Or simply double-click `run_app.bat` inside `extracted_project/`.
 
 ---
 
-## License
-© 2026 Mughal Mahal Restaurant. All rights reserved.
+© Mughal Mahal Restaurant. All rights reserved.
