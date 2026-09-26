@@ -6,7 +6,7 @@ export const FloatingContact: React.FC = () => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
-    <div id="floating-contact-container" className="fixed bottom-6 right-6 z-40 flex flex-col items-end">
+    <div id="floating-contact-container" className="fixed bottom-22 right-6 z-30 flex flex-col items-end">
       {/* Expanded Quick Contact Menu */}
       {isExpanded && (
         <div className="mb-3 bg-[#111116] border border-[#c5a059]/40 p-3 shadow-2xl space-y-2 text-xs w-64 animate-in fade-in slide-in-from-bottom-2 duration-200">

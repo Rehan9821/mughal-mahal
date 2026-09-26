@@ -6,6 +6,7 @@ import { LoadingScreen } from './components/LoadingScreen.tsx';
 import { ReservationModal } from './components/ReservationModal.tsx';
 import { OrderModal } from './components/OrderModal.tsx';
 import { FloatingContact } from './components/FloatingContact.tsx';
+import { MughalConcierge } from './components/MughalConcierge.tsx';
 import { PageTransitionOverlay, SlideDirection } from './components/PageTransitionOverlay.tsx';
 import { HomePage } from './pages/HomePage.tsx';
 import { MenuPage } from './pages/MenuPage.tsx';
@@ -206,6 +207,13 @@ export default function App() {
 
       {/* Global Floating Quick Contact */}
       <FloatingContact />
+
+      {/* Global MUGHAL AI Digital Host Concierge */}
+      <MughalConcierge
+        onOpenReservation={() => setReservationOpen(true)}
+        onOpenOrder={() => setOrderOpen(true)}
+        navigate={(route) => triggerNavigation(route, true)}
+      />
 
       {/* Global Modals */}
       <ReservationModal
